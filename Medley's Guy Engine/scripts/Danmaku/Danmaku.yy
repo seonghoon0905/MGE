@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Danmaku",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Danmaku",
+  "parent":{
+    "name":"Danmaku",
+    "path":"folders/Scripts/Danmaku.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

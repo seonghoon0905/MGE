@@ -1,0 +1,1 @@
+// No codes here. If you want to know how it's used, check handle_player_spawning of obj_world

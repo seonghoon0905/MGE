@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_test_room",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":3,
+  "conversionMode":0,
+  "duration":49.799114,
+  "name":"snd_test_room",
+  "parent":{
+    "name":"Test",
+    "path":"folders/Sounds/Standard/Test.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_test_room.ogg",
+  "type":0,
+  "volume":1.0,
+}

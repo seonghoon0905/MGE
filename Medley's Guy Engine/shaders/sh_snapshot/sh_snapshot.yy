@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"sh_snapshot",
+  "name":"sh_snapshot",
+  "parent":{
+    "name":"System",
+    "path":"folders/Shaders/System.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

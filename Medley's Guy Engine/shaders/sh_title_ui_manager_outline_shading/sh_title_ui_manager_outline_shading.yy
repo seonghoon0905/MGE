@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"sh_title_ui_manager_outline_shading",
+  "name":"sh_title_ui_manager_outline_shading",
+  "parent":{
+    "name":"System",
+    "path":"folders/Shaders/System.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

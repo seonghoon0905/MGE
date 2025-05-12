@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"sh_dotkid_indicator",
+  "name":"sh_dotkid_indicator",
+  "parent":{
+    "name":"Player",
+    "path":"folders/Shaders/Player.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

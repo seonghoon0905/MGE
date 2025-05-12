@@ -1,0 +1,37 @@
+Thanks for everything to make this project!
+
+<Original game reference>
+
+	"I Wanna Be The Guy" by Michael "Kayin" O'Reilly
+
+
+<Used libraries>
+
+	"Scribble" by Juju Adams
+	"Lock and key" by AlubJ
+
+
+<Referenced projects>
+
+	"I wanna be the Engine yuuutu edition" by ゆううつ
+
+	"I Wanna Be The GMS2.3 Engine YoYoYo Edition" by Yoyoyodude & Cube
+
+	"K&R GMS2 Engine" by KingSlendy & RedBatNick
+
+	"GuyLZ" by Dengol
+	
+	"Not Another Needle Engine" by Pieceofcheese87 & Patrickgh3
+	
+	"Verve GM82 Engine" by Verve
+	
+	"Renex Engine" by Renex
+
+
+<Engine Testers>
+	
+	Chobol
+	Biogom
+	Gafro
+	HoshinoStella
+	cm_stone

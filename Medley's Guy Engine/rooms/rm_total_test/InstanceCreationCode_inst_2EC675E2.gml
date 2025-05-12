@@ -1,0 +1,2 @@
+set_direct_trigger();
+add_direct_trigger_endless_rotation_in_eclipse(xstart + 32, ystart + 48, 1, 0.5, 2);

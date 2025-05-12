@@ -1,0 +1,1 @@
+jump_total = 3;
