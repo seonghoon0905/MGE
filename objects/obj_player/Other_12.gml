@@ -1,4 +1,11 @@
 /// @description PlayerDeath
+
+function kill_player(){
+	play_sound(snd_death, 0);
+	global.game_over = true;
+	global.other_player_data.death_count++;
+}
+
 function handle_touching_player_killer(){
 	if(global.debug_config.god_mode){
 		var _epsilon = 0.01;

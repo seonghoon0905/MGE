@@ -3,7 +3,8 @@ time_list = [];
 death_list = [];
 snapshot = [];
 
-pos_x = 0;
+pos_x = DEFAULT_CAMERA_WIDTH > 800 ? (DEFAULT_CAMERA_WIDTH - 800) / 2 : 0;
+pos_x = round(pos_x);
 pos_y = 426;
 
 icon_width = 180;

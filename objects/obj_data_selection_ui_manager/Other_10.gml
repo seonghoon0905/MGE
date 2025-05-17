@@ -15,7 +15,7 @@ function handle_snapshot(){
 			.starting_format("fnt_serif_bold_24", c_white)
 			.align(fa_middle, fa_top)
 			.blend(c_white, 0.5)
-			.draw(400, 314);
+			.draw(DEFAULT_CAMERA_WIDTH / 2, DEFAULT_CAMERA_HEIGHT / 2  + 10);
 	}
 }
 

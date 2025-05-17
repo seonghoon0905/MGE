@@ -10,7 +10,7 @@ function handle_data_selection_screen(){
 		.starting_format("fnt_serif_bold_24", c_white)
 		.transform(0.5, 0.5)
 		.align(fa_right, fa_bottom)
-		.draw(800 - 16, 608 - 16);
+		.draw(DEFAULT_CAMERA_WIDTH - 16, DEFAULT_CAMERA_HEIGHT - 16);
 }
 
 function handle_save_deleting_screen(){
