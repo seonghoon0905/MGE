@@ -15,7 +15,7 @@ function file_save_encrypted(_string, _file) {
 	// Here we edit the bytes for the first 50 bytes
 	try {
 		for(var _i = 0; _i < 50; _i++) {
-			buffer_poke(_buffer_1, _i, buffer_u32, 0x32495613 ^ buffer_peek(_buffer_1, _i, buffer_u32)); 
+			buffer_poke(_buffer_1, _i, buffer_u32, LOCK_AND_KEY_NUMBER ^ buffer_peek(_buffer_1, _i, buffer_u32)); 
 			// You can change "0x12345678" to any combo of numbers as long as it still starts with 0x
 		}
 	} catch (_exception){

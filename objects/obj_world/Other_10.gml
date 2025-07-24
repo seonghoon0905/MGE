@@ -14,6 +14,30 @@ function save_settings_and_key_config_data(){
 	save_json(global.key_config, "KeyConfig");
 }
 
+function handle_display(){
+    window_set_fullscreen(global.settings.fullscreen);
+    
+    switch(global.settings.window_size){
+        case 0:
+            window_set_size(DEFAULT_CAMERA_WIDTH, DEFAULT_CAMERA_HEIGHT);
+            break; 
+        case 1:
+            window_set_size(round(DEFAULT_CAMERA_WIDTH * 1.2), round(DEFAULT_CAMERA_HEIGHT * 1.2));
+            break; 
+        case 2:
+            window_set_size(round(DEFAULT_CAMERA_WIDTH * 1.5), round(DEFAULT_CAMERA_HEIGHT * 1.5));
+            break; 
+        case 3:
+            window_set_size(round(DEFAULT_CAMERA_WIDTH * 2), round(DEFAULT_CAMERA_HEIGHT * 2));
+            break; 
+    }
+    
+    window_center();
+    gpu_set_texfilter(global.settings.smoothing_mode);
+    display_reset(0, global.settings.vsync);
+}
+
+
 function handle_data_selection(){
 	if(!instance_exists(obj_data_selection_ui_manager)){
 		return;

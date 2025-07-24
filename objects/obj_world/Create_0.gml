@@ -80,7 +80,9 @@ function game_start(){
 	load_settings_and_key_config_data();
 	/* It loads settings and key config datas only once in the whole process of the program.
 	  (We saves settings and key config datas in the game end event in this object.) */
-
+    
+    handle_display();
+    
 	room_goto_next();
 	// Escape rm_init and go to the rm_title
 }
@@ -97,7 +99,6 @@ function step(){
 	back_to_title_with_f2();
 	synchronize_music_with_fps();
 	toggle_fullscreen();
-	handle_smoothing_mode();
 	
 	handle_simple_pause();
 	update_trigger_activator_triggers();

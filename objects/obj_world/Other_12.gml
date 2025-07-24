@@ -80,7 +80,7 @@ function handle_settings_array_of_index(){
 	var _achievment = ENABLE_ACHIEVEMENT ? ["achievement"] : [];
 	array_push(_indexes, _achievment);
 	
-	var _display = ["fullscreen", "smoothing_mode"];
+	var _display = ["fullscreen", "window_size", "smoothing_mode", "vsync"];
 	array_push(_indexes, _display);
 	
 	var _audio = ["master_volume", "music_volume", "effect_volume", "fps_sync"];
@@ -306,6 +306,40 @@ function handle_settings_fullscreen(){
 	}
 }
 
+function handle_settings_window_size(){
+    var _check = false;
+    
+    if(keyboard_check_pressed(vk_right)){
+        global.settings.window_size = global.settings.window_size + 1 >= 4 ? 0 : global.settings.window_size + 1;
+        _check = true;
+    }
+    else if(keyboard_check_pressed(vk_left)){
+        global.settings.window_size = global.settings.window_size - 1 < 0 ? 3 : global.settings.window_size - 1;
+        _check = true;
+    }
+    
+    if(!_check){
+        return;
+    }
+    
+    switch(global.settings.window_size){
+        case 0:
+            window_set_size(DEFAULT_CAMERA_WIDTH, DEFAULT_CAMERA_HEIGHT);
+            break; 
+        case 1:
+            window_set_size(round(DEFAULT_CAMERA_WIDTH * 1.2), round(DEFAULT_CAMERA_HEIGHT * 1.2));
+            break; 
+        case 2:
+            window_set_size(round(DEFAULT_CAMERA_WIDTH * 1.5), round(DEFAULT_CAMERA_HEIGHT * 1.5));
+            break; 
+        case 3:
+            window_set_size(round(DEFAULT_CAMERA_WIDTH * 2), round(DEFAULT_CAMERA_HEIGHT * 2));
+            break; 
+    }
+    
+    window_center();
+}
+
 function handle_settings_smoothing_mode(){
 	if(keyboard_check_pressed(vk_left) || keyboard_check_pressed(vk_right)){
 		if(!global.settings.smoothing_mode){
@@ -313,6 +347,19 @@ function handle_settings_smoothing_mode(){
 		}
 		else{
 			global.settings.smoothing_mode = false;
+		}
+	}
+}
+
+function handle_settings_vsync(){
+    if(keyboard_check_pressed(vk_left) || keyboard_check_pressed(vk_right)){
+		if(!global.settings.vsync){
+            display_reset(0, true);
+			global.settings.vsync = true;
+		}
+		else{
+            display_reset(0, false);
+			global.settings.vsync = false;
 		}
 	}
 }
@@ -389,12 +436,6 @@ function toggle_fullscreen(){
 			global.settings.fullscreen = false;
 		}
 	}
-	
-	window_set_fullscreen(global.settings.fullscreen);
-}
-
-function handle_smoothing_mode(){
-	gpu_set_texfilter(global.settings.smoothing_mode);
 }
 
 function handle_sub_categories(_category){
@@ -446,9 +487,15 @@ function handle_sub_categories(_category){
 		case "fullscreen":
 			handle_settings_fullscreen();
 			break;
+        case "window_size":
+            handle_settings_window_size();
+            break;
 		case "smoothing_mode":
 			handle_settings_smoothing_mode();
 			break;
+        case "vsync":
+            handle_settings_vsync();
+            break;
 			
 			
 		case "back_to_title":

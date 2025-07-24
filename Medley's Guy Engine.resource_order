@@ -62,7 +62,7 @@
     {"name":"Other","order":3,"path":"folders/Objects/System/UI/Other.yy",},
     {"name":"Settings","order":1,"path":"folders/Objects/System/UI/Settings.yy",},
     {"name":"Rooms","order":4,"path":"folders/Rooms.yy",},
-    {"name":"TestRoom","order":3,"path":"folders/Rooms/TestRoom.yy",},
+    {"name":"TestRoom","order":2,"path":"folders/Rooms/TestRoom.yy",},
     {"name":"Scripts","order":1,"path":"folders/Scripts.yy",},
     {"name":"Danmaku","order":1,"path":"folders/Scripts/Danmaku.yy",},
     {"name":"Shaders","order":6,"path":"folders/Shaders.yy",},

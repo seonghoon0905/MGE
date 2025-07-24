@@ -7,6 +7,9 @@ function initialize_world(){
 	
 	/* Macros for general settings */
 	#macro DATA_SLOT 3 // Define amount of player datas on the data selection screen. 
+    #macro LOCK_AND_KEY_NUMBER 0x32495613 
+    // For encrypting saved datas
+    // You can change "0x32495613" to any combo of numbers as long as it still starts with 0x
 	
 	#macro ENABLE_ACHIEVEMENT true // Define whether to enable the achivement system.
 	#macro ACHIEVEMENT_SLOT 4 // Define amount of achievements.
@@ -90,7 +93,9 @@ function initialize_world(){
 
 	global.settings = {
 		fullscreen : false,
+        window_size : 0,
 		smoothing_mode : false,
+        vsync : false,
 		backstep : false,
 		swap_items_with_number_keys : false,
 		master_volume : 100,

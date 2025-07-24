@@ -288,6 +288,34 @@ function handle_settings_fullscreen_ui(){
 	array_push(settings_arrow2_to_y_list, 96);
 }
 
+function handle_settings_window_size_ui(){
+    var _str;
+    
+    switch(global.settings.window_size){
+        case 0:
+		    _str = "Window Size : [[100%] / 120% / 150% / 200%";
+            break;
+        case 1:
+            _str = "Window Size : 100% / [[120%] / 150% / 200%";
+            break;
+        case 2:
+            _str = "Window Size : 100% / 120% / [[150%] / 200%";
+            break;
+        case 3:
+            _str = "Window Size : 100% / 120% / 150% / [[200%]";
+            break;
+	}
+	
+	scribble(_str)
+		.starting_format("fnt_serif_bold_24", c_white)
+		.transform(0.7, 0.7)
+		.align(fa_left, fa_top)
+		.blend(c_white, settings_master_alpha)
+		.draw(300, 145);
+		
+	array_push(settings_arrow2_to_y_list, 141);
+}
+
 function handle_settings_smoothing_mode_ui(){
 	var _str;
 	
@@ -303,9 +331,29 @@ function handle_settings_smoothing_mode_ui(){
 		.transform(0.7, 0.7)
 		.align(fa_left, fa_top)
 		.blend(c_white, settings_master_alpha)
-		.draw(300, 145);
+		.draw(300, 190);
 		
-	array_push(settings_arrow2_to_y_list, 141);
+	array_push(settings_arrow2_to_y_list, 186);
+}
+
+function handle_settings_vsync_ui(){
+	var _str;
+	
+	if(global.settings.vsync){
+		_str = "Vsync : [[ON] / OFF"
+	}
+	else{
+		_str = "Vsync : ON / [[OFF]"
+	}
+	
+	scribble(_str)
+		.starting_format("fnt_serif_bold_24", c_white)
+		.transform(0.7, 0.7)
+		.align(fa_left, fa_top)
+		.blend(c_white, settings_master_alpha)
+		.draw(300, 235);
+		
+	array_push(settings_arrow2_to_y_list, 231);
 }
 
 function handle_settings_master_volume_ui(){
@@ -479,7 +527,9 @@ function draw_settings_ui(){
 			break;
 		case 2:
 			handle_settings_fullscreen_ui();
+            handle_settings_window_size_ui();
 			handle_settings_smoothing_mode_ui();
+            handle_settings_vsync_ui();
 			break;
 		case 3:
 			handle_settings_master_volume_ui();

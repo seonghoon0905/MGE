@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.731429,
+  "duration":0.67925173,
   "name":"snd_dialogue1",
   "parent":{
     "name":"Dialogue",
