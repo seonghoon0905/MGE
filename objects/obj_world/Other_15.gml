@@ -52,17 +52,17 @@ function handle_gameover_screen(){
         return;
     }
     
-    var _alpha = min(game_over_controller / 50, 1);
+    var _control = min(game_over_controller / 50, 1);
     
     draw_set_color(c_black);
-    draw_set_alpha(_alpha / 2);
+    draw_set_alpha(_control * 0.7);
     draw_rectangle(0, 0, DEFAULT_CAMERA_WIDTH, DEFAULT_CAMERA_WIDTH, false);
     draw_set_alpha(1);
     
     scribble("Game Over\n[scale, 0.5]Press R To Restart")
 		.starting_format("fnt_serif_bold_24", c_white)
 		.align(fa_center, fa_middle)
-        .blend(c_white, _alpha)
+        .blend(c_white, _control)
 		.draw(DEFAULT_CAMERA_WIDTH / 2, DEFAULT_CAMERA_HEIGHT / 2);
     
     if(game_over_controller > 200){
@@ -72,6 +72,10 @@ function handle_gameover_screen(){
     game_over_controller++;
     var _pitch = audio_sound_get_pitch(global.settings.music_id);
     audio_sound_pitch(global.settings.music_id, lerp(_pitch, 0, game_over_controller / 200));
+    
+    if(audio_sound_get_pitch(global.settings.music_id) < 0.01){
+        audio_sound_pitch(global.settings.music_id, 0);
+    }
 }
 
 function handle_simple_pause_ui(){

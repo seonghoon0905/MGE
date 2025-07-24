@@ -10,6 +10,9 @@ function initialize_world(){
     #macro LOCK_AND_KEY_NUMBER 0x32495613 
     // For encrypting saved datas
     // You can change "0x32495613" to any combo of numbers as long as it still starts with 0x
+    #macro DATA_SELECTION_SCREEN_TYPE 0
+    // 0 : Standard IWBTG data selection screen
+    // 1 : Big Preview Snapshot
 	
 	#macro ENABLE_ACHIEVEMENT true // Define whether to enable the achivement system.
 	#macro ACHIEVEMENT_SLOT 4 // Define amount of achievements.

@@ -70,6 +70,7 @@ pause_sprite = undefined;
 simple_pause = false;
 pause_alpha = 0;
 game_over_controller = 0;
+game_over_stars = [];
 
 achievement_index = 0;
 
