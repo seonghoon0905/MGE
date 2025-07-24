@@ -43,6 +43,37 @@ function handle_simple_pause(){
 	}
 }
 
+function handle_gameover_screen(){
+    if(!global.in_game){
+        return;
+    }
+    
+    if(!global.game_over){
+        return;
+    }
+    
+    var _alpha = min(game_over_controller / 50, 1);
+    
+    draw_set_color(c_black);
+    draw_set_alpha(_alpha / 2);
+    draw_rectangle(0, 0, DEFAULT_CAMERA_WIDTH, DEFAULT_CAMERA_WIDTH, false);
+    draw_set_alpha(1);
+    
+    scribble("Game Over\n[scale, 0.5]Press R To Restart")
+		.starting_format("fnt_serif_bold_24", c_white)
+		.align(fa_center, fa_middle)
+        .blend(c_white, _alpha)
+		.draw(DEFAULT_CAMERA_WIDTH / 2, DEFAULT_CAMERA_HEIGHT / 2);
+    
+    if(game_over_controller > 200){
+        return;
+    }
+    
+    game_over_controller++;
+    var _pitch = audio_sound_get_pitch(global.settings.music_id);
+    audio_sound_pitch(global.settings.music_id, lerp(_pitch, 0, game_over_controller / 200));
+}
+
 function handle_simple_pause_ui(){
 	if(simple_pause){
 		draw_sprite(pause_sprite, 0, 0, 0);

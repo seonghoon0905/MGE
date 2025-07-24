@@ -25,7 +25,7 @@ function initialize_world(){
 	#macro ENABLE_PLAYER_BACKSTEP_FOREVER false // If you make this true, the player can use backstep anywhere.
 												// So you should make ENABLE_PLAYER_BACKSTEP false. 
 	#macro STARTING_ROOM rm_total_test // Choose which room to appear when the player first enters the game.
-	#macro ENABLE_RESPAWNING_WITH_ROOM_RESTART false // Define whether the room restarts when the player presses the load key.
+	#macro ENABLE_RESPAWNING_WITH_ROOM_RESTART true // Define whether the room restarts when the player presses the load key.
 	/* <Notice>
 	If you make ENABLE_RESPAWNING_WITH_ROOM_RESTART false, you should code all consumable objects 
 	can be regenerated. I recommend to use this macro only if room restart is causing issues. 

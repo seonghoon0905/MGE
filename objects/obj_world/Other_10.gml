@@ -214,9 +214,15 @@ function handle_player_respawning(){
 	}
 	
 	if(keyboard_check_pressed(global.key_config.load)){
+        with(obj_world){
+            game_over_controller = 0;
+        }
+        
+        global.game_over = false;
+        audio_sound_pitch(global.settings.music_id, 1);
+    
 		if(!ENABLE_RESPAWNING_WITH_ROOM_RESTART){
 			instance_destroy(obj_player);
-			global.game_over = false;
 		
 			if(room != global.player_data.room){
 				room_goto(global.player_data.room);

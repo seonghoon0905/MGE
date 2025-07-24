@@ -69,6 +69,7 @@ last_window_caption = "";
 pause_sprite = undefined;
 simple_pause = false;
 pause_alpha = 0;
+game_over_controller = 0;
 
 achievement_index = 0;
 
@@ -108,6 +109,7 @@ function step(){
 function draw_gui(){
 	draw_debug_info();
 	draw_settings_ui();
+    handle_gameover_screen();
 	handle_simple_pause_ui();
 }
 

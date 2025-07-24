@@ -1,6 +1,5 @@
 function initialize_room_music(){
 	// It's called at room start event of obj_world
-	
 	audio_master_gain(global.settings.master_volume / 100); // First, control master volume of audio
 	
 	var _room_music;
