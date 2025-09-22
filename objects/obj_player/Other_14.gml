@@ -481,4 +481,8 @@ function draw_player_sprite(){
 	resolves the issue easily.  */
 	
 	draw_sprite_ext(sprite_index, image_index_ext, x, y, global.player.xscale, draw_yscale, draw_angle, c_white, alpha);
+    
+    if(ENABLE_DIFFICULTY_MODE && global.other_player_data.difficulty == 1){
+        draw_sprite_ext(spr_player_bow, 0, x, y, global.player.xscale, draw_yscale, draw_angle, c_white, alpha);
+    }
 }

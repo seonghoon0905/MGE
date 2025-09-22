@@ -10,8 +10,8 @@
   "name":"obj_trigger_touch_activator",
   "overriddenProperties":[],
   "parent":{
-    "name":"Touch",
-    "path":"folders/Objects/Props/TriggerActivators/Touch.yy",
+    "name":"TriggerActivators",
+    "path":"folders/Objects/Props/TriggerActivators.yy",
   },
   "parentObjectId":{
     "name":"obj_trigger_activator_parent",

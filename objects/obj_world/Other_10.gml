@@ -39,7 +39,7 @@ function handle_display(){
 
 
 function handle_data_selection(){
-	if(!instance_exists(obj_data_selection_ui_manager)){
+	if(!instance_exists(data_selection_ui_manager)){
 		return;
 	}
 	
@@ -47,59 +47,29 @@ function handle_data_selection(){
 		return;
 	}
 	
-	if(!obj_title_ui_manager.data_deleting_pause){
+	if(!obj_title_ui_manager.difficulty_pause && !obj_title_ui_manager.data_deleting_pause){
 		if(keyboard_check_pressed(vk_right)){
 			var _index = global.savedata_index;
 			global.savedata_index = _index < DATA_SLOT - 1 ? _index + 1 : 0;
 		
-			obj_data_selection_ui_manager.animation_value = 0;
-		
-			obj_title_ui_manager.data_selection_other_data = load_other_player_data();
-			
-			if(obj_title_ui_manager.data_selection_other_data == undefined){
-				obj_title_ui_manager.data_selection_death_count = 0;
-			}
-			else{
-				var _death_count = obj_title_ui_manager.data_selection_other_data.death_count;
-				obj_title_ui_manager.data_selection_death_count = _death_count;
-			}
-			
-			if(obj_title_ui_manager.data_selection_other_data == undefined){
-				obj_title_ui_manager.data_selection_time = 0;
-			}
-			else{
-				var _time = obj_title_ui_manager.data_selection_other_data.time;
-				obj_title_ui_manager.data_selection_time = _time;
-			}
+			data_selection_ui_manager.animation_value = 0;
 		}
 		else if(keyboard_check_pressed(vk_left)){
 			var _index = global.savedata_index;
 			global.savedata_index = _index > 0 ? _index - 1 : DATA_SLOT - 1;
 		
-			obj_data_selection_ui_manager.animation_value = 0;
-		
-			obj_title_ui_manager.data_selection_other_data = load_other_player_data();
-			
-			if(obj_title_ui_manager.data_selection_other_data == undefined){
-				obj_title_ui_manager.data_selection_death_count = 0;
-			}
-			else{
-				var _death_count = obj_title_ui_manager.data_selection_other_data.death_count;
-				obj_title_ui_manager.data_selection_death_count = _death_count;
-			}
-			
-			if(obj_title_ui_manager.data_selection_other_data == undefined){
-				obj_title_ui_manager.data_selection_time = 0;
-			}
-			else{
-				var _time = obj_title_ui_manager.data_selection_other_data.time;
-				obj_title_ui_manager.data_selection_time = _time;
-			}
+			data_selection_ui_manager.animation_value = 0;
 		}
 	}
-	
-	if(!obj_title_ui_manager.data_deleting_pause && keyboard_check_pressed(vk_shift)){
-		global.in_game = true;
+    
+    if(ENABLE_DIFFICULTY_MODE && !obj_title_ui_manager.data_deleting_pause && keyboard_check_pressed(vk_shift)){
+        if(load_player_data() == undefined){
+            obj_title_ui_manager.difficulty_pause = true;        
+        }
+    }
+    
+	if(!obj_title_ui_manager.difficulty_pause && !obj_title_ui_manager.data_deleting_pause && keyboard_check_pressed(vk_shift)){
+        global.in_game = true;
 		
 		achievement_index = 0;
 		
@@ -120,21 +90,48 @@ function handle_data_selection(){
 		var _room = global.player_data.room == undefined ? STARTING_ROOM : global.player_data.room;
 		room_goto(_room);
 	}
+    
 	
-	if(keyboard_check_pressed(vk_delete)){
+	if(!obj_title_ui_manager.difficulty_pause && keyboard_check_pressed(vk_delete)){
 		obj_title_ui_manager.data_deleting_pause = true;
 	}
+    
+    if(!obj_title_ui_manager.data_deleting_pause && obj_title_ui_manager.difficulty_pause){
+        if(keyboard_check_pressed(vk_right)){
+            obj_title_ui_manager.difficulty_index = obj_title_ui_manager.difficulty_index >= 4 ? 1 : obj_title_ui_manager.difficulty_index + 1;
+        }
+        else if(keyboard_check_pressed(vk_left)){
+            obj_title_ui_manager.difficulty_index = obj_title_ui_manager.difficulty_index <= 1 ? 4 : obj_title_ui_manager.difficulty_index - 1;
+        }
+        
+        if(obj_title_ui_manager.difficulty_init && keyboard_check_pressed(vk_shift)){
+            global.in_game = true;
+    		achievement_index = 0;
+            global.other_player_data.difficulty = obj_title_ui_manager.difficulty_index;
+    		apply_macros_to_datas();
+            apply_player_data();
+    		var _room = global.player_data.room == undefined ? STARTING_ROOM : global.player_data.room;
+    		room_goto(_room);
+        }
+        else if(keyboard_check_pressed(ord("Z"))){
+            obj_title_ui_manager.difficulty_pause = false;
+            obj_title_ui_manager.difficulty_init = false;
+            obj_title_ui_manager.difficulty_index = 1;
+        }
+        
+        obj_title_ui_manager.difficulty_init = true;
+    }
 	
-	if(obj_title_ui_manager.data_deleting_pause){
+	if(!obj_title_ui_manager.difficulty_pause && obj_title_ui_manager.data_deleting_pause){
 		if(keyboard_check_pressed(vk_right) || keyboard_check_pressed(vk_left)){
 			obj_title_ui_manager.can_delete_data = !obj_title_ui_manager.can_delete_data;
 		}
 		
 		if(obj_title_ui_manager.can_delete_data && keyboard_check_pressed(vk_shift)){
 			
-			if(obj_data_selection_ui_manager.snapshot[global.savedata_index] != undefined){
-				sprite_delete(obj_data_selection_ui_manager.snapshot[global.savedata_index]);
-				obj_data_selection_ui_manager.snapshot[global.savedata_index] = undefined;
+			if(data_selection_ui_manager.snapshot[global.savedata_index] != undefined){
+				sprite_delete(data_selection_ui_manager.snapshot[global.savedata_index]);
+				data_selection_ui_manager.snapshot[global.savedata_index] = undefined;
 				file_delete("SnapShot\\SnapShot" + string(global.savedata_index) + ".png");
 			}
 			
@@ -145,18 +142,15 @@ function handle_data_selection(){
 			refresh_global_other_player_data();
 		
 			play_sound(snd_death, 0);
+            
+            file_delete(string("PlayerData\\PlayerData{0}.sav", global.savedata_index));
+            file_delete(string("OtherPlayerData\\OtherPlayerData{0}.sav", global.savedata_index));
 		
-			save_json_encrypted(global.player_data, string("PlayerData\\PlayerData{0}.sav", global.savedata_index));
-			save_json_encrypted(global.other_player_data, string("OtherPlayerData\\OtherPlayerData{0}.sav", global.savedata_index));
-			
-			obj_data_selection_ui_manager.time_list[global.savedata_index] = 0;
-			obj_data_selection_ui_manager.death_list[global.savedata_index] = 0;
-			
-			obj_title_ui_manager.data_selection_other_data = undefined;
-			obj_title_ui_manager.data_selection_death_count = 0;
-			obj_title_ui_manager.data_selection_time = 0;
+			data_selection_ui_manager.time_list[global.savedata_index] = 0;
+			data_selection_ui_manager.death_list[global.savedata_index] = 0;
+            data_selection_ui_manager.secret_items_list[global.savedata_index] = array_create(array_length(SECRETITEMS_SPRITES), false);
 		}
-		else if(!obj_title_ui_manager.can_delete_data && keyboard_check_pressed(vk_shift)){
+		else if((!obj_title_ui_manager.can_delete_data && keyboard_check_pressed(vk_shift)) || keyboard_check_pressed(ord("Z"))){
 			obj_title_ui_manager.can_delete_data = false;
 			obj_title_ui_manager.data_deleting_pause = false;
 		}
@@ -214,10 +208,7 @@ function handle_player_respawning(){
 	}
 	
 	if(keyboard_check_pressed(global.key_config.load)){
-        with(obj_world){
-            game_over_controller = 0;
-        }
-        
+        game_over_controller = 0;
         global.game_over = false;
         audio_sound_pitch(global.settings.music_id, 1);
     

@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.783673,
+  "duration":0.78367347,
   "name":"snd_block_change",
   "parent":{
     "name":"Standard",

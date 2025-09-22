@@ -56,13 +56,13 @@ function get_contacting_distance(_dir, _dist, _obj){
 
 function make_incollidable(_obj){
 	with(_obj){
-		mask_index = spr_noone;
-	}
+        mask_index = spr_noone;
+    }
 }
 
 function make_collidable(_obj){
 	with(_obj){
-		mask_index = sprite_index;
+        mask_index = sprite_index;
 	}
 }
 

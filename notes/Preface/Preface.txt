@@ -1,6 +1,4 @@
-Medley's Guy Engine 
-
-as known as "ㅅㅎEngine"
+Medley's Guy Engine (MGE)
 
 made by Medley(ㅅㅎ)
 
@@ -8,15 +6,11 @@ made by Medley(ㅅㅎ)
 
 <Notice>
 
-	1.	This engine basically support skin, item, backstep, and achievement system but if you don't want them,
-		just turn off them with macros in "initialize_world" script.
-
-	2.	I couldn't find ways to resolve errors and warnings from feather message. 
-		(Especially when i make a scribble object, i must face the error message.)
-		If you mind it, just right-click to ignore messages or disable feather.
+	1.	This engine basically support skin, item, backstep, achievement system, ETC. 
+        but if you don't want them, just turn off them with macros in "initialize_world" script.
 		
-	3.	If the player uses pause system (simple pause & settings screen), instance_deactivate_all and
+	2.	If the player uses pause system (simple pause & settings screen), instance_deactivate_all and
 		instance_activate_all are called and these causes change of instances' creation order in the layer.
 		So if you should strictly seperate the creation order, use layers.
 		
-	4.	Sorry for bad english in general comments :(
+    3.  If error occurs just by compiling, delete save data folder in AppData  

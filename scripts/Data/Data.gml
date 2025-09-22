@@ -21,7 +21,9 @@ function refresh_global_other_player_data(){
 		skins : ["standard", "crimson", "round"],
 		skin_index : 0,
 		inventory_index : 0,
-		achievements : array_create(ACHIEVEMENT_SLOT, false)
+        difficulty : 0,         
+		achievements : array_create(ACHIEVEMENT_SLOT, false),
+        secret_items : array_create(array_length(SECRETITEMS_SPRITES), false)
 	}
 }
 
@@ -73,6 +75,16 @@ function save_player_data(_play_snd = true){
 	if(_play_snd){
 		play_sound(snd_save, 0);
 	}
+    
+    if(DONT_SAVE_SECRETITEM_UNTIL_SAVING){
+        for(var _i = 0; _i < instance_number(obj_secretitem_parent); _i++){
+            var _inst = instance_find(obj_secretitem_parent, _i);
+            
+            if(_inst.get){
+                _inst.saved = true;
+            }
+        }
+    }
 	
 	var _player_x = PRESERVE_FLOATING_POINT ? obj_player.x : floor(obj_player.x);
 	var _player_y = PRESERVE_FLOATING_POINT ? obj_player.y : floor(obj_player.y);

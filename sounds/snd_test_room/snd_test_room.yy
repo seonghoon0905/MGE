@@ -12,8 +12,8 @@
   "duration":49.799114,
   "name":"snd_test_room",
   "parent":{
-    "name":"Test",
-    "path":"folders/Sounds/Standard/Test.yy",
+    "name":"Sounds",
+    "path":"folders/Sounds.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

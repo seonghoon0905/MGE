@@ -10,9 +10,14 @@ function initialize_world(){
     #macro LOCK_AND_KEY_NUMBER 0x32495613 
     // For encrypting saved datas
     // You can change "0x32495613" to any combo of numbers as long as it still starts with 0x
+    
     #macro DATA_SELECTION_SCREEN_TYPE 0
-    // 0 : Standard IWBTG data selection screen
-    // 1 : Big Preview Snapshot
+    
+    #macro ENABLE_DIFFICULTY_MODE true
+    // Define whether to enable difficulty mode
+    // You can use difficulty save objects
+    // Also the "difficulty" variable of global.other_player_data varies 1 to 4
+    // (1 : Medium, 2 : Hard, 3 : Very Hard, 4 : Impossible
 	
 	#macro ENABLE_ACHIEVEMENT true // Define whether to enable the achivement system.
 	#macro ACHIEVEMENT_SLOT 4 // Define amount of achievements.
@@ -22,6 +27,12 @@ function initialize_world(){
 	#macro SHOW_ACHIEVEMENT_ICON false // Set whether to show the achievement's icon in the settings screen
 	#macro SHOW_ACHIEVEMENT_COMPLETE_SIGN false // Set whether to show the "Complete!" message below completed achievement icons.
 	
+    #macro ENABLE_SECRETITEMS_SYSTEM true 
+    // Set whether to use the basic system of secret items
+    // When you make it true, secret items the player obtained will be shown in the selection screen 
+    #macro DONT_SAVE_SECRETITEM_UNTIL_SAVING true // If it's true, the player should save after obtaining the item 
+    #macro SECRETITEMS_SPRITES [spr_secretitem_0, spr_secretitem_1, spr_secretitem_2, spr_secretitem_3, spr_secretitem_4, spr_secretitem_5, spr_secretitem_6, spr_secretitem_7, spr_secretitem_8, spr_secretitem_9, spr_secretitem_10, spr_secretitem_11]
+    
 	#macro ENABLE_SKIN true // Define whether to enable skin system.
 	#macro ENABLE_ITEM_AND_INVENTORY true // Define whether to enable item and inventory system.
 	#macro ENABLE_PLAYER_BACKSTEP true // Define whether to enable backstep system.
@@ -33,7 +44,7 @@ function initialize_world(){
 	If you make ENABLE_RESPAWNING_WITH_ROOM_RESTART false, you should code all consumable objects 
 	can be regenerated. I recommend to use this macro only if room restart is causing issues. 
 	(Don't worry, at least all objects in the engine are designed to be regenerated with restarting room.) */
-	
+    
 	/* Macros for player control */
 	#macro PRESERVE_FLOATING_POINT true // If you make it true, floating points of the player's position will be removed every time when respawning.
 	#macro KILL_PLAYER_ON_BORDER true // Set whether the player to be kiiled on the borders of the room.
@@ -61,7 +72,7 @@ function initialize_world(){
 		gravity_dir : undefined,
 		kid_mode : undefined,
 		screen_rotated : undefined
-	}
+	};
 	
 	global.player_data = {
 		x : undefined,
@@ -73,7 +84,7 @@ function initialize_world(){
 		gravity_dir : 270,
 		kid_mode : "default",
 		screen_rotated : false
-	}
+	};
 	
 	global.other_player_data = {
 		time : 0,
@@ -83,14 +94,23 @@ function initialize_world(){
 		skins : ["standard", "crimson", "round"],
 		skin_index : 0,
 		inventory_index : 0,
-		achievements : array_create(ACHIEVEMENT_SLOT, false)
-	}
+        difficulty : 0, 
+        /*
+         * 0 : If ENABLE_DIFFICULTY_MODE is false, difficulty is always 0
+         * 1 : Medium
+         * 2 : Hard
+         * 3 : Very Hard
+         * 4 : Impossible
+         */
+		achievements : array_create(ACHIEVEMENT_SLOT, false),
+        secret_items : array_create(array_length(SECRETITEMS_SPRITES), false)
+	};
 	
 	global.warp = {
 		room : undefined,
 		x : undefined,
 		y : undefined
-	}
+	};
 
 	global.game_over = false;
 
@@ -107,7 +127,7 @@ function initialize_world(){
 		music_id : audio_play_sound(snd_no_music, 0, true),
 		fps_sync : false,
 		no_pause : false,
-	}
+	};
 	
 	global.game_paused = false;
 	global.no_pause = false;
@@ -125,13 +145,13 @@ function initialize_world(){
 		item_swap : ord("A"),
 		pause : ord("P"),
 		setting : vk_escape
-	}
+	};
 	
 	global.debug_config = {
 		god_mode : false,
 		inf_jump : false,
 		show_player_mask : false,
-	}
+	};
 	
 	global.debug_key_config = {
 		god_mode : ord("G"),
@@ -145,5 +165,5 @@ function initialize_world(){
 		room_speed_down : vk_f11,
 		debug_room : vk_f1,
 		debug_camera : vk_delete
-	}
+	};
 }

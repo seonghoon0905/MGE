@@ -344,9 +344,11 @@ function handle_settings_smoothing_mode(){
 	if(keyboard_check_pressed(vk_left) || keyboard_check_pressed(vk_right)){
 		if(!global.settings.smoothing_mode){
 			global.settings.smoothing_mode = true;
+            gpu_set_tex_filter(global.settings.smoothing_mode);
 		}
 		else{
 			global.settings.smoothing_mode = false;
+            gpu_set_tex_filter(global.settings.smoothing_mode);
 		}
 	}
 }
@@ -433,6 +435,7 @@ function toggle_fullscreen(){
 		}
 		else if(window_get_fullscreen()){
 			window_set_fullscreen(false);
+            window_center();
 			global.settings.fullscreen = false;
 		}
 	}

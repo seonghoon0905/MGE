@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":2.45551,
+  "duration":2.4266667,
   "name":"snd_achievement_effect",
   "parent":{
     "name":"Standard",

@@ -1,3 +1,5 @@
+my_difficulty = 4;
+
 saved = false; 
 frozen_time = 0;
 time_limit = 30;
@@ -9,7 +11,13 @@ image_xscale = floor(gravity_dir / 180) % 2 == 1 ? 1 : -1;
 
 // event function 
 function step(){
-	if(saved){
+    if(ENABLE_DIFFICULTY_MODE){
+        if(my_difficulty < global.other_player_data.difficulty){
+            instance_destroy();
+        }
+    }
+    
+  	if(saved){
 		frozen_time++;
 		if(frozen_time > time_limit){
 			saved = false;

@@ -70,9 +70,16 @@ pause_sprite = undefined;
 simple_pause = false;
 pause_alpha = 0;
 game_over_controller = 0;
-game_over_stars = [];
-
 achievement_index = 0;
+
+data_selection_ui_manager = undefined;
+difficulty_index = 0;
+
+switch(DATA_SELECTION_SCREEN_TYPE){
+    case 0:
+        data_selection_ui_manager = obj_data_selection_ui_manager_type0;
+        break;
+}
 
 //event_function
 function game_start(){
@@ -85,7 +92,7 @@ function game_start(){
     
     handle_display();
     
-	room_goto_next();
+	room_goto(rm_title);
 	// Escape rm_init and go to the rm_title
 }
 
