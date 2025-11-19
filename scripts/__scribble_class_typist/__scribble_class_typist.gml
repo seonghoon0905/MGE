@@ -3,7 +3,7 @@
 
 function __scribble_class_typist(_per_line) constructor
 {
-    static __scribble_state = __scribble_get_state();
+    static __scribble_state = __scribble_system().__state;
     
     __last_element = undefined;
     
@@ -16,15 +16,20 @@ function __scribble_class_typist(_per_line) constructor
     __skip_paused = false;
     __drawn_since_skip = false;
     
-    __sound_array                   = undefined;
-    __sound_overlap                 = 0;
-    __sound_pitch_min               = 1;
-    __sound_pitch_max               = 1;
-    __sound_gain                    = 1;
+    __sound_tag_gain = 1;
+    
+    __sound_array       = undefined;
+    __sound_overlap     = 0;
+    __sound_pitch_min   = 1;
+    __sound_pitch_max   = 1;
+    __sound_gain        = 1;
+    __sound_voice       = -1;
+    __sound_finish_time = current_time;
+    
     __sound_per_char                = false;
-    __sound_finish_time             = current_time;
     __sound_per_char_exception      = false;
     __sound_per_char_exception_dict = undefined;
+    __sound_per_char_interrupt      = false;
     
     __ignore_delay = false;
     
@@ -117,6 +122,7 @@ function __scribble_class_typist(_per_line) constructor
         __skip = _state;
         __skip_paused = true;
         __drawn_since_skip = false;
+        __delay_end = -infinity;
         
         return self;
     }
@@ -126,6 +132,7 @@ function __scribble_class_typist(_per_line) constructor
         __skip = _state;
         __skip_paused = false;
         __drawn_since_skip = false;
+        __delay_end = -infinity;
         
         return self;
     }
@@ -162,21 +169,21 @@ function __scribble_class_typist(_per_line) constructor
     /// @param pitchMax
     /// @param [exceptionString]
     /// @param [gain=1]
-    static sound_per_char = function(_in_sound_array, _pitch_min, _pitch_max, _exception_string, _gain = 1)
+    /// @param [interrupt=false]
+    static sound_per_char = function(_in_sound_array, _pitch_min, _pitch_max, _exception_string, _gain = 1, _interrupt = false)
     {
         var _sound_array = _in_sound_array;
         if (!is_array(_sound_array)) _sound_array = [_sound_array];
         
-        __sound_array     = _sound_array;
-        __sound_pitch_min = _pitch_min;
-        __sound_pitch_max = _pitch_max;
-        __sound_gain      = _gain;
-        __sound_per_char  = true;
+        __sound_per_char           = true;
+        __sound_array              = _sound_array;
+        __sound_pitch_min          = _pitch_min;
+        __sound_pitch_max          = _pitch_max;
+        __sound_gain               = _gain;
+        __sound_per_char_interrupt = _interrupt;
         
         if (is_string(_exception_string))
         {
-            if (!SCRIBBLE_ALLOW_GLYPH_DATA_GETTER) __scribble_error("SCRIBBLE_ALLOW_GLYPH_DATA_GETTER must be set to <true> to use sound-per-character exceptions");
-            
             __sound_per_char_exception = true;
             __sound_per_char_exception_dict = {};
             
@@ -262,8 +269,6 @@ function __scribble_class_typist(_per_line) constructor
     
     static character_delay_add = function(_character, _delay)
     {
-        if (!SCRIBBLE_ALLOW_GLYPH_DATA_GETTER) __scribble_error("SCRIBBLE_ALLOW_GLYPH_DATA_GETTER must be set to <true> to use per-character delay");
-        
         var _char_1 = _character;
         var _char_2 = 0;
         
@@ -358,6 +363,11 @@ function __scribble_class_typist(_per_line) constructor
         }
     }
     
+    static get_delay_paused = function()
+    {
+        return __delay_paused;
+    }
+    
     static get_paused = function()
     {
         return __paused;
@@ -389,7 +399,7 @@ function __scribble_class_typist(_per_line) constructor
     {
         if (_instance < 400000)
         {
-            __scribble_error("Cannot synchronise to a sound asset. Please provide a sound instance (as returned by play_sound())");
+            __scribble_error("Cannot synchronise to a sound asset. Please provide a sound instance (as returned by audio_play_sound())");
         }
         
         if (!audio_is_playing(_instance))
@@ -413,6 +423,23 @@ function __scribble_class_typist(_per_line) constructor
         __sync_instance  = undefined;
         __sync_paused    = false;
         __sync_pause_end = infinity;
+    }
+    
+    #endregion
+    
+    
+    
+    #region Gain
+    
+    static set_sound_tag_gain = function(_gain)
+    {
+        __sound_tag_gain = _gain;
+        return self;
+    }
+    
+    static get_sound_tag_gain = function()
+    {
+        return __sound_tag_gain;
     }
     
     #endregion
@@ -454,7 +481,8 @@ function __scribble_class_typist(_per_line) constructor
     
     static __process_event_stack = function(_character_count, _target_element, _function_scope)
     {
-        static _typewriter_events_map = __scribble_get_typewriter_events_map();
+        static _system = __scribble_system();
+        static _typewriter_events_map = _system.__typewriter_events_map;
         
         //This method processes events on the stack (which is filled by copying data from the target element in .__tick())
         //We return <true> if there have been no pausing behaviours called i.e. [pause] and [delay]
@@ -526,21 +554,19 @@ function __scribble_class_typist(_per_line) constructor
                 case __SCRIBBLE_AUDIO_COMMAND_TAG: //TODO - Add warning when adding a conflicting custom event
                     if (array_length(_event_data) >= 1)
                     {
-                        var _asset = _event_data[0];
-                        if (is_string(_asset)) _asset = asset_get_index(_asset);
-                        play_sound(_asset, 1, false);
+                        __scribble_play_sound(_event_data[0], __sound_tag_gain, 1);
                     }
                 break;
                 
                 case __SCRIBBLE_TYPIST_SOUND_COMMAND_TAG: //TODO - Add warning when adding a conflicting custom event
-                    sound(asset_get_index(_event_data[1]), real(_event_data[2]), real(_event_data[3]), real(_event_data[4]));
+                    sound(__scribble_parse_sound_array_string(_event_data[1]), real(_event_data[2]), real(_event_data[3]), real(_event_data[4]));
                 break;
                 
                 case __SCRIBBLE_TYPIST_SOUND_PER_CHAR_COMMAND_TAG: //TODO - Add warning when adding a conflicting custom event
                     switch(array_length(_event_data))
                     {
-                        case 4: sound_per_char(asset_get_index(_event_data[1]), real(_event_data[2]), real(_event_data[3])); break;
-                        case 5: sound_per_char(asset_get_index(_event_data[1]), real(_event_data[2]), real(_event_data[3]), _event_data[4]); break;
+                        case 4: sound_per_char(__scribble_parse_sound_array_string(_event_data[1]), real(_event_data[2]), real(_event_data[3])); break;
+                        case 5: sound_per_char(__scribble_parse_sound_array_string(_event_data[1]), real(_event_data[2]), real(_event_data[3]), _event_data[4]); break;
                     }
                 break;
                 
@@ -571,6 +597,8 @@ function __scribble_class_typist(_per_line) constructor
     
     static __play_sound = function(_head_pos, _character)
     {
+        static _system = __scribble_system();
+        
         var _sound_array = __sound_array;
         if (is_array(_sound_array) && (array_length(_sound_array) > 0))
         {
@@ -580,13 +608,18 @@ function __scribble_class_typist(_per_line) constructor
                 //Only play audio if a new character has been revealled
                 if (floor(_head_pos + 0.0001) > floor(__last_audio_character))
                 {
-                    if (!__sound_per_char_exception)
+                    if (not __sound_per_char_exception)
                     {
                         _play_sound = true;
                     }
                     else if (!variable_struct_exists(__sound_per_char_exception_dict, _character))
                     {
                         _play_sound = true;
+                    }
+                    
+                    if (_play_sound && __sound_per_char_interrupt)
+                    {
+                        audio_stop_sound(__sound_voice);
                     }
                 }
             }
@@ -599,19 +632,10 @@ function __scribble_class_typist(_per_line) constructor
             {
                 __last_audio_character = _head_pos;
                 
-                var _audio_asset = _sound_array[floor(__scribble_random()*array_length(_sound_array))];
-                if (is_string(_audio_asset))
+                __sound_voice = __scribble_play_sound(_sound_array[floor(__scribble_random()*array_length(_sound_array))], __sound_gain, lerp(__sound_pitch_min, __sound_pitch_max, __scribble_random()));
+                if (__sound_voice >= 0)
                 {
-                    var _external_sound_map = __scribble_get_external_sound_map();
-                    _audio_asset = _external_sound_map[? _audio_asset];
-                }
-                
-                if (_audio_asset != undefined)
-                {
-                    var _inst = audio_play_sound(_audio_asset, 0, false);
-                    audio_sound_pitch(_inst, lerp(__sound_pitch_min, __sound_pitch_max, __scribble_random()));
-                    audio_sound_gain(_inst, __sound_gain, 0);
-                    __sound_finish_time = current_time + 1000*audio_sound_length(_inst) - __sound_overlap;
+                    __sound_finish_time = current_time + 1000*audio_sound_length(__sound_voice) - __sound_overlap;
                 }
             }
         }
@@ -676,6 +700,8 @@ function __scribble_class_typist(_per_line) constructor
         //Find the model from the last element
         var _model = __last_element.ref.__get_model(true);
         if (!is_struct(_model)) return undefined;
+        
+        var _glyph_data_getter = _model.__allow_glyph_data_getter;
         
         //Get page data
         //We use this to set the maximum limit for the typewriter feature
@@ -780,7 +806,7 @@ function __scribble_class_typist(_per_line) constructor
                         var _found_size = array_length(_found_events);
                         
                         //Add a per-character delay if required
-                        if (SCRIBBLE_ALLOW_GLYPH_DATA_GETTER
+                        if (_glyph_data_getter
                         &&  !__ignore_delay
                         &&  __character_delay
                         &&  (__last_character >= 1) //Don't check character delay until we're on the first character (index=1)
@@ -830,7 +856,7 @@ function __scribble_class_typist(_per_line) constructor
                     if (__last_character <= _page_character_count)
                     {
                         //Only play sound once per frame if we're going reaaaally fast
-                        __play_sound(_head_pos, SCRIBBLE_ALLOW_GLYPH_DATA_GETTER? (_page_data.__glyph_grid[# _head_pos-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE]) : 0);
+                        __play_sound(_head_pos, _glyph_data_getter? (_page_data.__glyph_grid[# _head_pos-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE]) : 0);
                     }
                     else
                     {

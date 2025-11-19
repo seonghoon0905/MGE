@@ -1675,7 +1675,7 @@ function handle_platform(){
 	refresh_fall_from_platform();
 	handle_moving_platform();	
 	
-	_inst = instance_place(x, y, obj_platform);
+	var _inst = instance_place(x, y, obj_platform);
 	
 	if(_inst != noone && !_inst.bounce && _inst.standable){
 		escape_from_platform(_inst);
@@ -1684,7 +1684,7 @@ function handle_platform(){
 	var _vertical_dx = lengthdir_x(vspd, global.player.gravity_dir);
 	var _vertical_dy = lengthdir_y(vspd, global.player.gravity_dir);
 	
-	var _inst = instance_place(x + _vertical_dx, y + _vertical_dy, obj_platform);
+    _inst = instance_place(x + _vertical_dx, y + _vertical_dy, obj_platform);
 	
 	if(_inst != noone && _inst.standable){
 		settle_on_platform(_inst);

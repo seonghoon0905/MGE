@@ -56,8 +56,8 @@ function end_step(){
 		var _align = (chatbox_align == undefined) ? "middle" : chatbox_align;
 		var _sound_array = (chatbox_sound_array == undefined) ? [snd_dialogue1] : chatbox_sound_array;
 		var _font = (chatbox_font == undefined) ? "fnt_serif_bold_24" : chatbox_font;
-	
-		chatbox = new chatbox_class(chatbox_x, chatbox_y, chatbox_dialogues, _delay, _font_scale, _text_color, _align, _sound_array, _font);
+        var _parent = id;
+		chatbox = new chatbox_class(chatbox_x, chatbox_y, chatbox_dialogues, _delay, _font_scale, _text_color, _align, _sound_array, _font, _parent);
 	}
 	
 	if(activate() && chatbox != undefined && chatbox_clone == undefined){

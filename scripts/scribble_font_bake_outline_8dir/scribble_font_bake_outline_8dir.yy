@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scribble_font_bake_outline_8dir",
   "parent":{
-    "name":"Fonts",
-    "path":"folders/External Libraries/Scribble/Fonts.yy",
+    "name":"Legacy",
+    "path":"folders/External Libraries/Scribble/Legacy.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

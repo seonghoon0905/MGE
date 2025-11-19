@@ -1,5 +1,4 @@
-/// @description constructor
-function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _align, _sound_array, _font) constructor{
+function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _align, _sound_array, _font, _parent) constructor{
 	x = _x;
 	y = _y;
 	
@@ -10,6 +9,7 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 	align = _align;
 	sound_array = _sound_array;
 	font = _font;
+    parent = _parent;
 	
 	white_space_size = 16;
 	
@@ -73,7 +73,7 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 	
 	array_push(select_section, {page : undefined});
 	
-	function refresh_scribble_object(){
+    function refresh_scribble_object(){
 		var _halign, _valign;
 		switch(align){
 			case "middle":
@@ -104,26 +104,26 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 	chatbox_height = 0;
 	
 	function refresh_typist(){
-		other.typist.in(delay, 5);
-		other.typist.ease(SCRIBBLE_EASE.CIRC, 0, -5, 1, 1, 45, 0.1);	
-		other.typist.sound_per_char(sound_array, 0.85, 1, " ", global.settings.effect_volume / 100);
+		parent.typist.in(delay, 5);
+		parent.typist.ease(SCRIBBLE_EASE.CIRC, 0, -5, 1, 1, 45, 0.1);	
+		parent.typist.sound_per_char(sound_array, 0.85, 1, " ", global.settings.effect_volume / 100);
 	}
 	
 	refresh_typist();
 	
 	function handle_standard_key_action(){
 		if(keyboard_check_pressed(global.key_config.jump)){
-			if(other.typist.get_paused()){
-				other.typist.unpause();
+			if(parent.typist.get_paused()){
+				parent.typist.unpause();
 			}
 			else{
-				other.typist.skip_to_pause();
+				parent.typist.skip_to_pause();
 			}
 		}
 		
 		if(keyboard_check_pressed(vk_control)){
-			other.typist.unpause();
-			other.typist.skip();
+			parent.typist.unpause();
+			parent.typist.skip();
 		}
 	}
 	
@@ -167,16 +167,16 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 		offset = (offset == old_offset) ? offset + string_length(_macro1 + _macro2) : offset;
 		
 		handle_pause_tag_before_select_section();
-		other.typist.skip_to_pause();
+		parent.typist.skip_to_pause();
 	}
 	
 	skip_when_select_command_is_on_last = false;
 	
 	function handle_select_section_key_action(){
-		if(other.typist.get_position() < select_section[select_section_index].start_pos + old_offset){
+		if(parent.typist.get_position() < select_section[select_section_index].start_pos + old_offset){
 			if(keyboard_check_pressed(vk_control)){
 				handle_pause_tag_before_select_section();
-				other.typist.skip_to_pause();
+				parent.typist.skip_to_pause();
 			}
 			else{
 				handle_standard_key_action();
@@ -187,8 +187,8 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 		if(!select_section_started){
 			update_select_section_string();
 			
-			other.typist.sound_per_char(sound_array, 0.5, 1, " ", 0);
-			other.typist.skip_to_pause();
+			parent.typist.sound_per_char(sound_array, 0.5, 1, " ", 0);
+			parent.typist.skip_to_pause();
 			
 			select_section_started = true;
 		}
@@ -215,16 +215,16 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 			select_section_started = false;
 			
 			refresh_typist();
-			other.typist.unpause();
+			parent.typist.unpause();
 			
-			if(other.typist.get_position() >= string_length(scribble_object.get_text()) - 1){
+			if(parent.typist.get_position() >= string_length(scribble_object.get_text()) - 1){
 				skip_when_select_command_is_on_last = true;
 			}
 		}
 	}
 	
 	function update_typist(){
-		if(other.typist.get_state() == 1){
+		if(parent.typist.get_state() == 1){
 			return;
 		}
 		
@@ -306,23 +306,23 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 	}
 	
 	function update_scribble_object(){
-		if(other.deactivate()){
+		if(parent.deactivate()){
 			refresh_typist();
-			delete other.chatbox_clone;
-			other.chatbox_clone = undefined;
-			call_later(1, time_source_units_frames, other.destroy);
+			delete parent.chatbox_clone;
+			parent.chatbox_clone = undefined;
+			call_later(1, time_source_units_frames, parent.destroy);
 			return;
 		}
 		
-		var _flag1 = other.typist.get_state() == 1 && keyboard_check_pressed(global.key_config.jump);
+		var _flag1 = parent.typist.get_state() == 1 && keyboard_check_pressed(global.key_config.jump);
 		var _flag2 = skip_when_select_command_is_on_last;
 		
 		if(_flag1 || _flag2){
 			if(page >= array_length(dialogues) - 1){
 				refresh_typist();
-				delete other.chatbox_clone;
-				other.chatbox_clone = undefined;
-				call_later(1, time_source_units_frames, other.destroy);
+				delete parent.chatbox_clone;
+				parent.chatbox_clone = undefined;
+				call_later(1, time_source_units_frames, parent.destroy);
 				return;
 			}
 			
@@ -346,7 +346,7 @@ function chatbox_class(_x, _y, _dialogues, _delay, _font_scale, _text_color, _al
 				_offset = 0;
 		}
 		scribble_object
-			.draw(x + _offset, y + _offset, other.typist);
+			.draw(x + _offset, y + _offset, parent.typist);
 		
 	}
 	
